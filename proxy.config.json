@@ -1,0 +1,8 @@
+{
+    "/api/*": {
+        "target":"https://americas.onepoint-projects.com",
+        "secure":false,
+        "changeOrigin": true
+
+        }
+    }  
