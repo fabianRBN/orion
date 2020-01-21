@@ -28,24 +28,134 @@
   </a>
 </div>
 <br>
-<div>
-  <mat-card class="example-card">
-    <mat-card-header>
-      <mat-card-title></mat-card-title>
-      <mat-card-subtitle></mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <p>
+<div class="container">
+
+  <div class="row" >
+    <div class="col-12">
+      <mat-form-field class="col-12" >
+        <mat-label>Seleccione un proyecto</mat-label>
+        <mat-select [(value)]="proyectSelected">
+     
+          <mat-option *ngFor="let proyecto of proyectos" (onSelectionChange)="changeSelectProject(proyecto)" [value]="proyecto">{{proyecto.name}}</mat-option>
       
-      </p>
-    </mat-card-content>
-    <mat-card-actions>
-     <button mat-button>Detalle</button>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+    <br>
+    <div class="row container" *ngIf="proyectSelected != 0">
+
+    <div class="col-6">
+      <mat-card >
+        <mat-card-header>
+         
+          <mat-card-title>{{proyectSelected.name}}</mat-card-title>
+          <mat-card-subtitle>{{proyectSelected.number}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>
+            {{proyectSelected.description}}            
+          </p>
+          <br>
+          <div>
+            <label><span >Inicio: </span>{{proyectSelected.start | date:'medium'}}</label>
+            <br>
+            <label><span>Finalizacion: </span>{{proyectSelected.finish | date:'medium'}}</label>
+          </div>
+          <br>
+          <div class="container"  style="text-align: center;">
+            <mat-progress-bar 
+                style="height: 20px;"
+                class="example-margin"
+                [color]="color"
+                [mode]="mode"
+                value="{{proyectSelected.progreso }}"
+                bufferValue="100">
+                
+            </mat-progress-bar>
+            {{proyectSelected.progreso | number:'.1-2'}} %
+         
+          </div>
+          <div *ngIf="proyectSelected.situation  !='' ">
+     
+              <label><span>Situacion actual: </span> <br>{{proyectSelected.situation }}</label>
+
+      
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button>LIKE</button>
+          <button mat-button>SHARE</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+    <div class="col-6">
+      <mat-card>
+
+        <mat-list>
+          <mat-list-item>Item 1</mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item>Item 2</mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item>Item 3</mat-list-item>
+        </mat-list>
+        
+      </mat-card>
+      
+    </div>
+    </div>
+
+
+  </div>
+
+<!-- 
+  <div class=" row">
+
+    <mat-card *ngFor="let proyecto of proyectos" class=" col-12 example-card">
+      <mat-card-header>
+        <mat-card-title>{{proyecto.name}}</mat-card-title>
+        <mat-card-subtitle>{{proyecto.number}}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <br>
+        <p>
+          {{proyecto.description}}
+        </p>
+        <br>
+        <section class="example-section" style="    text-align: center;">
+
+          <mat-progress-bar
+              class="example-margin"
+              [color]="color"
+              [mode]="mode"
+              value="{{proyecto.progreso }}"
+              bufferValue="100">
+          </mat-progress-bar>
+          <br>
+          {{proyecto.progreso | number:'.1-2'}} %
+      
+          <p>
+            <br>
+            Capital actual: {{proyecto.actualEffort | number:'.1-2'}}$
+            <br>
+            Capital Total: {{proyecto.remainingEffort | number:'.1-2'}}$
+          </p>
+        </section>
+       
+        
+        <br>
+       
+        
+      </mat-card-content>
+      <mat-card-actions style="    text-align: right;">
+       <button mat-button>Detalle</button>
+      
+      </mat-card-actions>
+    </mat-card>
+  
     
-    </mat-card-actions>
-  </mat-card>
-  
-  
+  </div> -->
 </div>
 
-<router-outlet></router-outlet>
+
+<!-- <router-outlet></router-outlet> -->

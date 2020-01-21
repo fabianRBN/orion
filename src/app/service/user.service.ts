@@ -33,11 +33,10 @@ export class UserService {
 
     this.header = new Headers({
       'Content-Type': 'application/json',
-
-      'Authorization': 'Bearer  sg7KIH0zlSi6pBJMpUgRAvAMwSrDmWvdhDCcfzo22tLGZtJWwGImnAPAK0xIFbL0fstz3OcJktUfMcTviEkT79iC3GXOHF48JvDkz86KWaT4ziSeox1YMhiWPSWRQ81J'
+      'Authorization': 'Bearer 39RJCAs2VB9LTIYjVNlDiikXo7JfRZ7eWWtCv2XRq8ynWxjKCABPN3fuRRLmrwHlkhzvoljiZs0Zh6fVg6Htu5MiyLat8UIEG3zLSTyS1tUyZXQFJpYqmUVcV6NagD08'
     })
    return this.httpClient.get(
-      `/api/json/v2/users/currentUser`,{headers:this.header, withCredentials:true}
+      `/api/json/v2/projects/listMyProjects`,{headers:this.header, withCredentials:true}
      );
  }
 }

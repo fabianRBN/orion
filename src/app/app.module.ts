@@ -9,8 +9,13 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-
+import { MatProgressBarModule}from '@angular/material/progress-bar';
+import {MatGridListModule} from '@angular/material/grid-list';
 import { CookieService} from 'ngx-cookie-service';
+
+import { MatSelectModule } from '@angular/material/select';
+import { MatListModule } from '@angular/material/list';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -23,7 +28,12 @@ import { CookieService} from 'ngx-cookie-service';
     BrowserAnimationsModule,
     HttpClientModule,
     MatCardModule,
-    MatButtonModule
+    MatButtonModule,
+    MatProgressBarModule,
+    MatGridListModule,
+    NgbModule,
+    MatSelectModule,
+    MatListModule
   ],
   providers: [CookieService],
   bootstrap: [AppComponent]

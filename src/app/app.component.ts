@@ -23,6 +23,16 @@ export class AppComponent implements OnInit {
     resources:[],
     source:null
   };
+  //Progress Bar
+  color = 'primary';
+  mode = 'determinate';
+  value = 50;
+  bufferValue = 75;
+
+  proyectSelected = '0';
+
+  proyectos:any =[];
+
   constructor(private userService: UserService, 
     private projectService: ProjectService, 
     private cookieService: CookieService,
@@ -31,19 +41,28 @@ export class AppComponent implements OnInit {
 
   }
 
+  changeSelectProject(id){
+    console.log(id)
+  }
+
   ngOnInit() {
     this.userService.getSingOn().subscribe((data)=>{
-      this.user =  data;
-      console.log(this.user);
-       this.cookieService.set('JSESSIONID',JSON.stringify(data),0,'/','americas.onepoint-projects.com'); 
-      this.loginService.setUserLoggedIn(data);
-    
-      this.userService.getlistMyProjects().subscribe((data)=>{
-        console.log(data)
-      });
-     
+      this.user =  data;    
+          
     });
-
+    this.projectService.getlistMyProjects().subscribe((data2:any)=>{
+      this.proyectos = data2.projectNode;
+      this.proyectos.forEach((element:any) => {
+        this.projectService.getPlanForProject(element.id).subscribe((planProject:any)=>{
+          element.progreso = planProject.complete;
+          element.actualEffort =planProject.actualEffort;
+          element.remainingEffort = planProject.remainingEffort;
+          element.planing = planProject;
+        })
+      });
+      
+      console.log(this.proyectos)
+    });
   
   }
 }
