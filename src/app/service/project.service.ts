@@ -30,4 +30,17 @@ export class ProjectService {
      );
   }
 
+  public getProjectStatusById(idProjectStatus){
+   
+    return this.httpClient.get(
+       `/api/json/v2/projects/getProjectStatusById/`+idProjectStatus,{headers:this.header, withCredentials:true}
+      );
+   }
+
+  public listTaskOfProject(idProject){
+    return this.httpClient.get(
+      `/api/json/v2/tasks/listTasksOfProject/`+idProject,{headers:this.header, withCredentials:true}
+     );
+  }
+
 }

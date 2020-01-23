@@ -291,4 +291,22 @@
   span{
     font-weight: bold;
   }
-  
+
+  mat-card {
+    margin-top: 2%;
+    margin-bottom: 2%;
+  }
+  #divChart {
+    display: block;
+    width: 400px;
+    height: 400px;
+  }
+  .circulo {
+    width: 10px;
+    height: 10px;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    margin: 5px;
+   
+}

@@ -15,11 +15,17 @@ import { CookieService} from 'ngx-cookie-service';
 
 import { MatSelectModule } from '@angular/material/select';
 import { MatListModule } from '@angular/material/list';
+
+import { ChartsModule } from 'ng2-charts';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { BarChartComponent } from './bar-chart/bar-chart.component';
+
+
 
 @NgModule({
   declarations: [
     AppComponent,
+    BarChartComponent,
     
   ],
   imports: [
@@ -33,7 +39,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     MatGridListModule,
     NgbModule,
     MatSelectModule,
-    MatListModule
+    MatListModule,
+    ChartsModule
   ],
   providers: [CookieService],
   bootstrap: [AppComponent]

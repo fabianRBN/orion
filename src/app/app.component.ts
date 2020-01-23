@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from './service/user.service';
 import { User } from './class/user';
 import { ProjectService } from './service/project.service';
-import { CookieService } from 'ngx-cookie-service';
-import { LoginService } from './service/login.service';
-import { Session } from 'protractor';
+import {MatSelectChange } from '@angular/material/select'
+import { IfStmt } from '@angular/compiler';
+
+
 
 @Component({
   selector: 'app-root',
@@ -28,27 +29,59 @@ export class AppComponent implements OnInit {
   mode = 'determinate';
   value = 50;
   bufferValue = 75;
+  proyectSelected:any = '0';
 
-  proyectSelected = '0';
+  datosGrafica:any = []
 
   proyectos:any =[];
 
+ 
+
+
+  
+
   constructor(private userService: UserService, 
     private projectService: ProjectService, 
-    private cookieService: CookieService,
-    private loginService: LoginService
-    ){
 
+    ){
+    
   }
 
-  changeSelectProject(id){
-    console.log(id)
+  
+  
+
+  changeSelectProject(proyecto){
+    proyecto = proyecto.value;
+    if(proyecto.projectManager){
+      this.userService.getRecurso(proyecto.projectManager).subscribe( res =>{
+        this.proyectSelected.projectManagerData = res;
+      })
+    
+     
+    }else{
+      console.log('no existe');
+    }
+    if(this.proyectSelected.projectStatus){
+      this.projectService.getProjectStatusById(this.proyectSelected.projectStatus).subscribe( estatus =>{
+        this.proyectSelected.projectStatus = estatus;
+      });
+    }
+
+    this.projectService.listTaskOfProject(this.proyectSelected.id).subscribe(task=>{
+      this.proyectSelected.tasks = task;  
+    });
+   
+
+    this.datosGrafica = [ { data: [proyecto.planing.baseEffort, proyecto.planing.actualEffort, proyecto.planing.remainingEffort, proyecto.planing.expectedEffort ], label: 'Resources' }];
+    console.log(proyecto); 
+   
   }
 
   ngOnInit() {
+   
     this.userService.getSingOn().subscribe((data)=>{
       this.user =  data;    
-          
+  
     });
     this.projectService.getlistMyProjects().subscribe((data2:any)=>{
       this.proyectos = data2.projectNode;
@@ -58,11 +91,25 @@ export class AppComponent implements OnInit {
           element.actualEffort =planProject.actualEffort;
           element.remainingEffort = planProject.remainingEffort;
           element.planing = planProject;
-        })
+          console.log('planProject')
+        });
+       /*  if(element.projectManager){
+          this.userService.getRecurso(element.projectManager).subscribe(res=>{
+            element.projectMangerData=res;
+
+          })
+        }else{
+          element.projectMangerData=null;
+        } */
+      
       });
       
-      console.log(this.proyectos)
     });
+
+    
   
   }
+
+
+ 
 }

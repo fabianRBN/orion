@@ -34,9 +34,9 @@
     <div class="col-12">
       <mat-form-field class="col-12" >
         <mat-label>Seleccione un proyecto</mat-label>
-        <mat-select [(value)]="proyectSelected">
+        <mat-select [(value)]="proyectSelected" (selectionChange)="changeSelectProject($event)" >
      
-          <mat-option *ngFor="let proyecto of proyectos" (onSelectionChange)="changeSelectProject(proyecto)" [value]="proyecto">{{proyecto.name}}</mat-option>
+          <mat-option *ngFor="let proyecto of proyectos" [value]="proyecto">{{proyecto.name}}</mat-option>
       
         </mat-select>
       </mat-form-field>
@@ -73,7 +73,13 @@
                 bufferValue="100">
                 
             </mat-progress-bar>
-            {{proyectSelected.progreso | number:'.1-2'}} %
+            <div style="display: flex; justify-content: space-between;">
+              <div>   {{proyectSelected.planing.actualEffort | number:'.1-2'}} $</div>
+           
+      <div>        {{proyectSelected.progreso | number:'.1-2'}} %</div>
+      <div>        {{proyectSelected.planing.openEffort | number:'.1-2'}} $</div>
+
+            </div>
          
           </div>
           <div *ngIf="proyectSelected.situation  !='' ">
@@ -89,20 +95,83 @@
         </mat-card-actions>
       </mat-card>
     </div>
+
     <div class="col-6">
       <mat-card>
+        <mat-card-header>
+         
+          <mat-card-title>Propiedades</mat-card-title>
+          
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content >
+          <div class="container row" style="margin-top: 5%;">
+            <div class="col-6" *ngIf="proyectSelected.projectMangerData">
+              <label>Project Manager:  <h6>{{proyectSelected.projectMangerData.name}}</h6> </label>
+            </div>
 
-        <mat-list>
-          <mat-list-item>Item 1</mat-list-item>
-          <mat-divider></mat-divider>
-          <mat-list-item>Item 2</mat-list-item>
-          <mat-divider></mat-divider>
-          <mat-list-item>Item 3</mat-list-item>
-        </mat-list>
+            <div class="col-6" *ngIf="proyectSelected.number">
+              <label>NUMBER:  <h6>{{proyectSelected.number }}</h6> </label>
+            </div>
+            <div class="col-6" *ngIf="proyectSelected.start">
+              <label>START DATE:  <h6>{{proyectSelected.start | date:'medium'}}</h6> </label>
+            </div>
         
+            <div class="col-6" *ngIf="proyectSelected.planing.finish">
+              <label>FINISH DATE:  <h6>{{proyectSelected.planing.finish | date:'medium'}}</h6> </label>
+            </div>
+
+            <div class="col-6" *ngIf="proyectSelected.projectStatus">
+              <label> PIPELINE STAGE <h6>{{proyectSelected.projectStatus.name }}</h6> </label>
+            </div>
+
+            <div class="col-6" *ngIf="proyectSelected.planing.finish">
+            <div class="container">
+              <label class="row">GENERAL STATUS:  
+              
+                
+              </label>
+              <div class="row">
+                <h6  class="circulo" style="background-color: #d9d9d9; "></h6> 
+                <h6  class="circulo" style="background-color: #d9d9d9; "></h6> 
+                <h6  class="circulo" style="background-color: #90d812; "></h6> 
+              </div>
+            </div>
+
+              
+            </div>
+            
+          </div>
+           
+          
+          </mat-card-content>
+    
       </mat-card>
       
     </div>
+
+    <div class="col-6">
+      <mat-card>
+        <mat-card-header>
+         
+          <mat-card-title>Resource</mat-card-title>
+          
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content >
+          
+          <app-bar-chart 
+            [barChartLabels]="['Plan ($)', 'Actual ($)', 'Rem. ($)', 'Exp. ($)']"
+            [barChartPlugins]="[]"
+            [barChartData]="datosGrafica"
+          ></app-bar-chart>
+          </mat-card-content>
+    
+      </mat-card>
+      
+    </div>
+
+
     </div>
 
 
