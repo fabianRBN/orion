@@ -12,6 +12,7 @@ export class ProjectService {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer 39RJCAs2VB9LTIYjVNlDiikXo7JfRZ7eWWtCv2XRq8ynWxjKCABPN3fuRRLmrwHlkhzvoljiZs0Zh6fVg6Htu5MiyLat8UIEG3zLSTyS1tUyZXQFJpYqmUVcV6NagD08'
   })
+  private urlPath ="https://americas.onepoint-projects.com";
 
   constructor(private httpClient: HttpClient) { }
 
@@ -19,27 +20,27 @@ export class ProjectService {
 
     
    return this.httpClient.get(
-      `/api/json/v2/projects/listMyProjects`,{headers: this.header, withCredentials:true}
+      this.urlPath + `/api/json/v2/projects/listMyProjects`,{headers: this.header, withCredentials:true}
      );
  }
 
   public getPlanForProject(idProject){
    
    return this.httpClient.get(
-      `/api/json/v2/projects/getPlanForProject/`+idProject,{headers:this.header, withCredentials:true}
+      this.urlPath + `/api/json/v2/projects/getPlanForProject/`+idProject,{headers:this.header, withCredentials:true}
      );
   }
 
   public getProjectStatusById(idProjectStatus){
    
     return this.httpClient.get(
-       `/api/json/v2/projects/getProjectStatusById/`+idProjectStatus,{headers:this.header, withCredentials:true}
+       this.urlPath + `/api/json/v2/projects/getProjectStatusById/`+idProjectStatus,{headers:this.header, withCredentials:true}
       );
    }
 
   public listTaskOfProject(idProject){
     return this.httpClient.get(
-      `/api/json/v2/tasks/listTasksOfProject/`+idProject,{headers:this.header, withCredentials:true}
+      this.urlPath + `/api/json/v2/tasks/listTasksOfProject/`+idProject,{headers:this.header, withCredentials:true}
      );
   }
 
