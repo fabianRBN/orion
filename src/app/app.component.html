@@ -1,230 +1,456 @@
+<mat-drawer-container class="example-container" autosize>
+    <mat-drawer #drawer class="example-sidenav" mode="side" style="width: auto;">
+        <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+            <!-- This is the tree node template for expandable nodes -->
+            <mat-tree-node mat-button *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding (click)="treenodeselected($event)">
+              <button mat-icon-button matTreeNodeToggle  
+                      [attr.aria-label]="'toggle ' + node.name">
+                <mat-icon class="mat-icon-rtl-mirror">
+                  {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                </mat-icon>
+              </button>
+              {{node.name}}
+            </mat-tree-node>
+          </mat-tree>
+    </mat-drawer>
+  
+    <div class="example-sidenav-content" style="background: #d9d9d9;">
+  
 
-<div class="toolbar" role="banner">
-  <img
-    width="40"
-    alt="Angular Logo"
-    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg=="
-  />
-  <span>{{user.name}}</span>
-    <div class="spacer"></div>
-  <a aria-label="Angular on twitter" target="_blank" rel="noopener" href="https://twitter.com/angular" title="Twitter">
+      <div class="toolbar" role="banner">
+        <img alt="Angular Logo" mat-button (click)="drawer.toggle()" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==" width="40"/>
+        <span>{{user.name}}</span>
+        <div class="spacer"></div>
+        <a aria-label="Angular on twitter" href="https://twitter.com/angular" rel="noopener" target="_blank" title="Twitter">
     
-    <svg id="twitter-logo" height="24" data-name="Logo — FIXED" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
-      <defs>
-        <style>
-          .cls-1 {
-            fill: none;
-          }
-
-          .cls-2 {
-            fill: #ffffff;
-          }
-        </style>
-      </defs>
-      <rect class="cls-1" width="400" height="400" />
-      />
-    </svg>
+            <svg data-name="Logo — FIXED" height="24" id="twitter-logo" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <style>
+                        .cls-1 {
+                            fill: none;
+                        }
     
-  </a>
-</div>
-<br>
-<div class="container">
-
-  <div class="row" >
-    <div class="col-12">
-      <mat-form-field class="col-12" >
-        <mat-label>Seleccione un proyecto</mat-label>
-        <mat-select [(value)]="proyectSelected" (selectionChange)="changeSelectProject($event)" >
-     
-          <mat-option *ngFor="let proyecto of proyectos" [value]="proyecto">{{proyecto.name}}</mat-option>
-      
-        </mat-select>
-      </mat-form-field>
-
+                        .cls-2 {
+                            fill: #ffffff;
+                        }
+                    </style>
+                </defs>
+                <rect class="cls-1" height="400" width="400"/>
+                />
+            </svg>
+    
+        </a>
     </div>
     <br>
-    <div class="row container" *ngIf="proyectSelected != 0">
-
-    <div class="col-6">
-      <mat-card >
-        <mat-card-header>
-         
-          <mat-card-title>{{proyectSelected.name}}</mat-card-title>
-          <mat-card-subtitle>{{proyectSelected.number}}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <p>
-            {{proyectSelected.description}}            
-          </p>
-          <br>
-          <div>
-            <label><span >Inicio: </span>{{proyectSelected.start | date:'medium'}}</label>
-            <br>
-            <label><span>Finalizacion: </span>{{proyectSelected.finish | date:'medium'}}</label>
-          </div>
-          <br>
-          <div class="container"  style="text-align: center;">
-            <mat-progress-bar 
-                style="height: 20px;"
-                class="example-margin"
-                [color]="color"
-                [mode]="mode"
-                value="{{proyectSelected.progreso }}"
-                bufferValue="100">
+    <div class="container">
+    
+            <div>
+                <mat-accordion>
+                    <mat-expansion-panel (opened)="panelOpenState = true"
+                    (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Portafolios
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            {{proyectSelected.name || ''}}
+                        </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <div>
+                            <mat-card>
+                                <mat-card-header>
                 
-            </mat-progress-bar>
-            <div style="display: flex; justify-content: space-between;">
-              <div>   {{proyectSelected.planing.actualEffort | number:'.1-2'}} $</div>
-           
-      <div>        {{proyectSelected.progreso | number:'.1-2'}} %</div>
-      <div>        {{proyectSelected.planing.openEffort | number:'.1-2'}} $</div>
-
-            </div>
-         
-          </div>
-          <div *ngIf="proyectSelected.situation  !='' ">
-     
-              <label><span>Situacion actual: </span> <br>{{proyectSelected.situation }}</label>
-
-      
-          </div>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-button>LIKE</button>
-          <button mat-button>SHARE</button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
-
-    <div class="col-6">
-      <mat-card>
-        <mat-card-header>
-         
-          <mat-card-title>Propiedades</mat-card-title>
-          
-        </mat-card-header>
-        <mat-divider></mat-divider>
-        <mat-card-content >
-          <div class="container row" style="margin-top: 5%;">
-            <div class="col-6" *ngIf="proyectSelected.projectMangerData">
-              <label>Project Manager:  <h6>{{proyectSelected.projectMangerData.name}}</h6> </label>
-            </div>
-
-            <div class="col-6" *ngIf="proyectSelected.number">
-              <label>NUMBER:  <h6>{{proyectSelected.number }}</h6> </label>
-            </div>
-            <div class="col-6" *ngIf="proyectSelected.start">
-              <label>START DATE:  <h6>{{proyectSelected.start | date:'medium'}}</h6> </label>
-            </div>
-        
-            <div class="col-6" *ngIf="proyectSelected.planing.finish">
-              <label>FINISH DATE:  <h6>{{proyectSelected.planing.finish | date:'medium'}}</h6> </label>
-            </div>
-
-            <div class="col-6" *ngIf="proyectSelected.projectStatus">
-              <label> PIPELINE STAGE <h6>{{proyectSelected.projectStatus.name }}</h6> </label>
-            </div>
-
-            <div class="col-6" *ngIf="proyectSelected.planing.finish">
-            <div class="container">
-              <label class="row">GENERAL STATUS:  
-              
+                                    <mat-card-title>
+                                        <span>Portafolio:</span>
+                                        Proyectos AFE 20425
+                                    </mat-card-title>
                 
-              </label>
-              <div class="row">
-                <h6  class="circulo" style="background-color: #d9d9d9; "></h6> 
-                <h6  class="circulo" style="background-color: #d9d9d9; "></h6> 
-                <h6  class="circulo" style="background-color: #90d812; "></h6> 
-              </div>
-            </div>
+                                </mat-card-header>
+                                <mat-divider></mat-divider>
+                                <mat-card-content>
+                                    <div class="container">
+                                        <div class="row" style="margin-top:2%">
+                                            <div class="col-6">
+                                                <div class="col-12">
+                                                    <app-bar-chart [barChartData]="datosfinales" [barChartLabels]="estadosGrafica" [barChartPlugins]="[]"></app-bar-chart>
+                                                    <button mat-button (click)="setValueofGrafic()" >Refrescar</button>
 
-              
-            </div>
+                                                    <br>
+                                                        <span>
+                                                            Presupuesto Total:</span>
+                                                        {{allProject.base | number:'.1-2'}}
+                                                    </div>
+                
+                                                    <div class="col-12">
+                                                        <span>
+                                                            Presupuesto Gastado:
+                                                        </span>
+                
+                                                        {{allProject.total | number:'.1-2'}}
+                
+                                                    </div>
+                                                    <br>
+                                                        <div style="margin-top: 2%;">
+                                                            <div class="col-12">
+                                                                <mat-accordion>
+                                                                    <mat-expansion-panel (opened)="panelOpenState = true"
+                                                                    (closed)="panelOpenState = false">
+                                                                        <mat-expansion-panel-header>
+                                                                        <mat-panel-title>
+                                                                            Top Projectos (Presupuesto)
+                                                                        </mat-panel-title>
+                                                                        <mat-panel-description>
+                                                                        </mat-panel-description>
+                                                                        </mat-expansion-panel-header>
+                                                                        <ul style="margin-top: 2%;">
+                                                                            <li (click)="selectProject({value:proyecto})" *ngFor="let proyecto of proyectos">
+                                                                                {{proyecto.name}}
+                                                                            </li>
+                                                                        </ul>
+                                                                    </mat-expansion-panel>
+                                                                </mat-accordion>
+                                                           
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                
+                
+                                                        <div class="container row" style="margin-top: 5%;">
+                                                            <div class="col-6">
+                                                                <label>PROYECTOS TOTALES:
+                                                                    <h6>
+                                                                        {{proyectos.length}}
+                
+                                                                    </h6>
+                                                                </label>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <label>PROYECTOS ACTIVOS
+                                                                    <h6>
+                                                                        {{proyectos.length}}</h6>
+                                                                </label>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <label>PROYECTOS ACTIVOS (%)
+                                                                    <h6>
+                                                                        100%</h6>
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="col-6">
+                                                                <label>
+                                                                    SPI
+                                                                    <h6>
+                                                                        {{allProject.total / allProject.base | number:'.1-4' }}
+                                                                    </h6>
+                                                                </label>
+                                                            </div>
             
-          </div>
+                                                            <div class="col-12">
+                                                                <mat-form-field class="col-12">
+                                                                    <mat-label>Seleccione un proyecto</mat-label>
+                                                                    <mat-select (selectionChange)="changeSelectProject($event)" [(value)]="proyectSelected">
+                                        
+                                                                        <mat-option *ngFor="let proyecto of proyectos" [value]="proyecto">{{proyecto.name}}</mat-option>
+                                        
+                                                                    </mat-select>
+                                                                </mat-form-field>
+                                        
+                                                            </div>
+                
+                                                        </div>
+                
+                                                    </div>
+                
+                
+                                                </div>
+                                            </div>
+                
+                
+                                        </mat-card-content>
+                
+                            </mat-card>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
            
-          
-          </mat-card-content>
+                    </div>
+                    <div class="row">
+                        
+                        <br>
+                            <div *ngIf="proyectSelected != 0" class="row container" style="background-color: #d9d9d9;">
     
-      </mat-card>
-      
-    </div>
-
-    <div class="col-6">
-      <mat-card>
-        <mat-card-header>
-         
-          <mat-card-title>Resource</mat-card-title>
-          
-        </mat-card-header>
-        <mat-divider></mat-divider>
-        <mat-card-content >
-          
-          <app-bar-chart 
-            [barChartLabels]="['Plan ($)', 'Actual ($)', 'Rem. ($)', 'Exp. ($)']"
-            [barChartPlugins]="[]"
-            [barChartData]="datosGrafica"
-          ></app-bar-chart>
-          </mat-card-content>
+                                <div class="col-6">
+                                    <mat-card>
+                                        <mat-card-header>
     
-      </mat-card>
-      
+                                            <mat-card-title>
+                                                <h3>Proyecto:</h3>
+                                                <br>
+                                                    {{proyectSelected.name}}
+                                                </mat-card-title>
+                                                <mat-card-subtitle>{{proyectSelected.number}}</mat-card-subtitle>
+                                            </mat-card-header>
+                                            <mat-card-content>
+                                                <p>
+                                                    {{proyectSelected.description}}
+                                                </p>
+                                                <br>
+                                                    <div>
+                                                        <label>
+                                                            <span>Inicio:
+                                                            </span>
+                                                            {{proyectSelected.start | date:'medium'}}</label>
+                                                        <br>
+                                                            <label>
+                                                                <span>Finalizacion:
+                                                                </span>
+                                                                {{proyectSelected.planing.finish | date:'medium'}}</label>
+                                                        </div>
+                                                        <br>
+                                                            <div class="container" style="text-align: center;">
+                                                                <mat-progress-bar style="height: 20px;" class="example-margin" [color]="color" [mode]="mode" value="{{proyectSelected.progresoPorcentaje }}" bufferValue="100"></mat-progress-bar>
+                                                                <div style="display: flex; justify-content: space-between;">
+                                                                    <div>
+                                                                        {{proyectSelected.planing.actualEffort | number:'.1-2'}}
+                                                                        $</div>
+    
+                                                                    <div>
+                                                                        {{proyectSelected.progresoPorcentaje | number:'.0-0'}}
+                                                                        %</div>
+                                                                    <div>
+                                                                        {{(proyectSelected.planing.actualEffort+proyectSelected.planing.openEffort) | number:'.1-2'}}
+                                                                        $
+                                                                    </div>
+    
+                                                                </div>
+                                                                <br>
+                                                                    <br>
+    
+                                                                        <div *ngIf="proyectSelected.planing.datesProgress < 100" class="">
+                                                                            <mat-progress-bar style="height: 20px;" class="example-margin" [color]="color" [mode]="mode" value="{{proyectSelected.planing.datesProgress }}" bufferValue="100"></mat-progress-bar>
+                                                                            <div style="text-align: center;">
+                                                                                {{proyectSelected.planing.datesProgress | number:'.0-0' }}
+                                                                                %
+                                                                            </div>
+                                                                        </div>
+                                                                        <div>
+                                                                            Plazo de Ejecución</div>
+                                                                        <br>
+                                                                            <div *ngIf="proyectSelected.planing.datesProgress > 100" class="">
+                                                                                <div style="display: flex; justify-content: space-between;">
+                                                                                    <div>0 d
+                                                                                    </div>
+    
+                                                                                    <div>
+                                                                                        {{setDateFinish(proyectSelected.planing.start, null) | number:'.0-0'}}d</div>
+                                                                                    <div>
+                                                                                        {{setDateFinish(proyectSelected.planing.start, proyectSelected.planing.finish) | number:'.0-0'}}d
+                                                                                    </div>
+    
+                                                                                </div>
+                                                                                <mat-progress-bar style=" height: 20px; " class="example-margin" color="warn" [mode]="mode" value="{{proyectSelected.planing.datesProgress }}" bufferValue="100"></mat-progress-bar>
+                                                                                <div style="text-align: center;">
+                                                                                    {{proyectSelected.planing.datesProgress | number:'.0-0'  }}
+                                                                                    %
+                                                                                </div>
+                                                                            </div>
+    
+                                                                        </div>
+                                                                        <div *ngIf="proyectSelected.situation  !='' ">
+    
+                                                                            <label>
+                                                                                <span>Situacion actual:
+                                                                                </span>
+                                                                                <br>{{proyectSelected.situation }}</label>
+    
+    
+                                                                            </div>
+                                                                        </mat-card-content>
+                                                                        <mat-card-actions></mat-card-actions>
+                                                                    </mat-card>
+                                                                </div>
+    
+                                                                <div class="col-6">
+                                                                    <mat-card>
+                                                                        <mat-card-header>
+    
+                                                                            <mat-card-title>Propiedades</mat-card-title>
+    
+                                                                        </mat-card-header>
+                                                                        <mat-divider></mat-divider>
+                                                                        <mat-card-content>
+                                                                            <div class="container row" style="margin-top: 5%;">
+                                                                                <div *ngIf="proyectSelected.projectMangerData" class="col-6">
+                                                                                    <label>Project Manager:
+                                                                                        <h6>{{proyectSelected.projectMangerData.name}}</h6>
+                                                                                    </label>
+                                                                                </div>
+    
+                                                                                <div *ngIf="proyectSelected.number" class="col-6">
+                                                                                    <label>NUMERO:
+                                                                                        <h6>{{proyectSelected.number }}</h6>
+                                                                                    </label>
+                                                                                </div>
+                                                                                <div *ngIf="proyectSelected.start" class="col-6">
+                                                                                    <label>FECHA DE INICIO:
+                                                                                        <h6>{{proyectSelected.start | date:'medium'}}</h6>
+                                                                                    </label>
+                                                                                </div>
+    
+                                                                                <div *ngIf="proyectSelected.planing.finish" class="col-6">
+                                                                                    <label>FECHA DE FIN:
+                                                                                        <h6>{{proyectSelected.planing.finish | date:'medium'}}</h6>
+                                                                                    </label>
+                                                                                </div>
+    
+                                                                                <div *ngIf="proyectSelected.projectStatusData" class="col-6">
+                                                                                    <label>
+                                                                                        PIPELINE STAGE
+                                                                                        <h6>{{proyectSelected.projectStatusData.name }}</h6>
+                                                                                    </label>
+                                                                                </div>
+    
+                                                                                <div class="col-6">
+                                                                                    <label>
+                                                                                        SPI
+                                                                                        <h6>{{ proyectSelected.spi | number:'.1-2' }}</h6>
+                                                                                    </label>
+                                                                                </div>
+    
+                                                                                <div *ngIf="proyectSelected.planing.finish" class="col-6">
+                                                                                    <div class="container">
+                                                                                        <label class="row">ESTATUS GENERAL :
+    
+    
+                                                                                        </label>
+                                                                                        <div *ngIf="proyectSelected.projectStatusData">
+                                                                                            <div *ngIf="proyectSelected.projectStatusData.color == 14 " class="row">
+                                                                                                <h6 class="circulo" style="background-color: #d9d9d9; "></h6>
+                                                                                                <h6 class="circulo" style="background-color: #d9d9d9; "></h6>
+                                                                                                <h6 class="circulo" style="background-color: #90d812; "></h6>
+                                                                                            </div>
+                                                                                            <div *ngIf="proyectSelected.projectStatus.color == 11 " class="row">
+                                                                                                <h6 class="circulo" style="background-color: #d9d9d9; "></h6>
+                                                                                                <h6 class="circulo" style="background-color: #ffce00; "></h6>
+    
+                                                                                                <h6 class="circulo" style="background-color: #d9d9d9; "></h6>
+                                                                                            </div>
+                                                                                            <div *ngIf="proyectSelected.projectStatus.color == 1 " class="row">
+                                                                                                <h6 class="circulo" style="background-color: #d9d9d9; "></h6>
+                                                                                                <h6 class="circulo" style="background-color: #d9d9d9; "></h6>
+                                                                                                <h6 class="circulo" style="background-color: #ffa300; "></h6>
+                                                                                            </div>
+                                                                                        </div>
+    
+                                                                                    </div>
+    
+    
+                                                                                </div>
+    
+                                                                            </div>
+    
+    
+                                                                        </mat-card-content>
+    
+                                                                    </mat-card>
+    
+                                                                </div>
+    
+                                                                <div class="col-6">
+                                                                    <mat-card>
+                                                                        <mat-card-header>
+    
+                                                                            <mat-card-title></mat-card-title>
+    
+                                                                        </mat-card-header>
+                                                                        <mat-divider></mat-divider>
+                                                                        <mat-card-content>
+    
+                                                                            <app-bar-chart [barChartData]="datosGrafica" [barChartLabels]="['Planificado ($)', 'Actual ($)', 'Restante. ($)']" [barChartPlugins]="[]"></app-bar-chart>
+                                                                        </mat-card-content>
+    
+                                                                    </mat-card>
+    
+                                                                </div>
+    
+                                                                <div class="col-12">
+
+                                                                    <mat-accordion>
+                                                                        <mat-expansion-panel (opened)="panelOpenState = true"
+                                                                        (closed)="panelOpenState = false">
+                                                                            <mat-expansion-panel-header>
+                                                                            <mat-panel-title>
+                                                                                {{listActividades.length }} Actividades
+                                                                            </mat-panel-title>
+                                                                            <mat-panel-description>
+                                                                            </mat-panel-description>
+                                                                            </mat-expansion-panel-header>
+                                                                            <mat-card>
+                                                                               
+                                                                                <mat-divider></mat-divider>
+                                                                                <mat-card-content>
+                                                                                    <div *ngIf="listActividades">
+            
+            
+                                                                                        <div *ngFor="let actividad of listActividades">
+                                                                                            <div (click)="opendDialog(actividad)" button="button" class="row">
+            
+                                                                                                <div class="col-1">
+                                                                                                    <span>
+                                                                                                        {{actividad.wbsCode}}
+                                                                                                    </span>
+                                                                                                </div>
+                                                                                                <div class="col-4">
+                                                                                                    {{actividad.name}}
+                                                                                                </div>
+                                                                                                <div class="col-2" style="text-align: end;">
+                                                                                                    {{actividad.start | date:'shortDate'}}
+                                                                                                </div>
+                                                                                                <div class="col-2" style="text-align: end;">
+                                                                                                    {{actividad.finish | date:'shortDate'}}
+                                                                                                </div>
+                                                                                                <div class="col-3">
+                                                                                                    <div class="row">
+                                                                                                        <div class="col-9">
+                                                                                                            <mat-progress-bar [color]="color" [mode]="mode" [value]="actividad.progresoPorcentaje" bufferValue="100" class="example-margin" style="height: 10px; margin-top: 5px;"></mat-progress-bar>
+                                                                                                        </div>
+                                                                                                        <div class="col-2">{{actividad.progresoPorcentaje | number:'.0-0'}}%</div>
+            
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <mat-divider></mat-divider>
+                                                                                            </div>
+            
+            
+                                                                                        </div>
+            
+                                                                                    </div>
+            
+            
+                                                                                </mat-card-content>
+            
+                                                                            </mat-card>
+                                                                        </mat-expansion-panel>
+                                                                    </mat-accordion>
+                                                                   
+    
+                                                                </div>
+    
+    
+                                                            </div>
+    
+    
+                                                        </div>
+    
+
     </div>
-
-
+    
     </div>
-
-
-  </div>
-
-<!-- 
-  <div class=" row">
-
-    <mat-card *ngFor="let proyecto of proyectos" class=" col-12 example-card">
-      <mat-card-header>
-        <mat-card-title>{{proyecto.name}}</mat-card-title>
-        <mat-card-subtitle>{{proyecto.number}}</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <br>
-        <p>
-          {{proyecto.description}}
-        </p>
-        <br>
-        <section class="example-section" style="    text-align: center;">
-
-          <mat-progress-bar
-              class="example-margin"
-              [color]="color"
-              [mode]="mode"
-              value="{{proyecto.progreso }}"
-              bufferValue="100">
-          </mat-progress-bar>
-          <br>
-          {{proyecto.progreso | number:'.1-2'}} %
-      
-          <p>
-            <br>
-            Capital actual: {{proyecto.actualEffort | number:'.1-2'}}$
-            <br>
-            Capital Total: {{proyecto.remainingEffort | number:'.1-2'}}$
-          </p>
-        </section>
-       
-        
-        <br>
-       
-        
-      </mat-card-content>
-      <mat-card-actions style="    text-align: right;">
-       <button mat-button>Detalle</button>
-      
-      </mat-card-actions>
-    </mat-card>
   
-    
-  </div> -->
-</div>
+</mat-drawer-container>
 
 
-<!-- <router-outlet></router-outlet> -->
+                                                <!-- <router-outlet></router-outlet> -->

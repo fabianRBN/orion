@@ -1,0 +1,39 @@
+<div class="container">
+    <div class="row">
+
+        <div class="col-12">
+            <h4>{{actividad.name}}</h4>
+        </div>
+
+        <div class="col-12">
+            <p>{{actividad.description}}</p>
+        </div>
+
+        <div class="col-12">
+            <p>Ultima modificacion: <span>{{actividad.modified | date:'shortDate'}}</span></p>
+        </div>
+
+        <div class="col-12">
+            <p>Fecha de creacion: <span> {{actividad.created | date:'shortDate'}} </span> </p>
+        </div>
+
+        <div class="col-12">
+            <mat-progress-bar 
+            style="height: 20px;"
+            class="example-margin"
+            color="primary"
+            mode="determinate"
+            value="{{actividad.complete }}"
+            bufferValue="101">
+            
+            </mat-progress-bar>
+            <div style="display: flex; justify-content: space-between;">
+                <div>   {{actividad.actualEffort | number:'.1-2'}} $</div>
+             
+        <div>        {{actividad.progreso | number:'.1-2'}} %</div>
+        <div>        {{actividad.openEffort | number:'.1-2'}} $</div>
+  
+              </div>
+        </div>
+    </div>
+</div>

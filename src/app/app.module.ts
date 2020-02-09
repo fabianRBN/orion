@@ -15,10 +15,16 @@ import { CookieService} from 'ngx-cookie-service';
 
 import { MatSelectModule } from '@angular/material/select';
 import { MatListModule } from '@angular/material/list';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSidenavModule  } from '@angular/material/sidenav';
+import { MatExpansionModule} from '@angular/material/expansion'
+import { MatTreeModule} from '@angular/material/tree'
+import { MatIconModule} from '@angular/material/icon'
 
 import { ChartsModule } from 'ng2-charts';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { BarChartComponent } from './bar-chart/bar-chart.component';
+import { DialogActividadComponent } from './dialog-actividad/dialog-actividad.component';
 
 
 
@@ -26,8 +32,10 @@ import { BarChartComponent } from './bar-chart/bar-chart.component';
   declarations: [
     AppComponent,
     BarChartComponent,
+    DialogActividadComponent,
     
   ],
+  entryComponents:[DialogActividadComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -40,7 +48,12 @@ import { BarChartComponent } from './bar-chart/bar-chart.component';
     NgbModule,
     MatSelectModule,
     MatListModule,
-    ChartsModule
+    ChartsModule,
+    MatDialogModule,
+    MatSidenavModule,
+    MatExpansionModule,
+    MatTreeModule,
+    MatIconModule
   ],
   providers: [CookieService],
   bootstrap: [AppComponent]
