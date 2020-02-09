@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Injectable } from '@angular/core';
 import { UserService } from './service/user.service';
 import { User } from './class/user';
 import { ProjectService } from './service/project.service';
@@ -6,49 +6,102 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogActividadComponent } from './dialog-actividad/dialog-actividad.component'
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
 import {FlatTreeControl} from '@angular/cdk/tree';
+import {CollectionViewer, SelectionChange} from '@angular/cdk/collections';
+import {BehaviorSubject, Observable, merge} from 'rxjs';
+import {map} from 'rxjs/operators';
 
-
-interface FoodNode {
-  name: string;
-  children?: FoodNode[];
+export class DynamicFlatNode {
+  constructor(public item: string, public level: number = 1, public expandable: boolean = false,
+              public isLoading: boolean = false) {}
 }
+export class DynamicDatabase {
+  dataMap = new Map();
 
-const TREE_DATA: FoodNode[] = [
-  {
-    name: 'Vegetables',
-    children: [
-      {
-        name: 'Green',
-        children: [
-          {name: 'Broccoli'},
-          {name: 'Brussels sprouts'},
-        ]
-      }, {
-        name: 'Orange',
-        children: [
-          {name: 'Pumpkins'},
-          {name: 'Carrots'},
-        ]
-      },
-    ]
-  },
-];
+  rootLevelNodes = ['194216117'];
 
-/** Flat node with expandable and level information */
-interface ExampleFlatNode {
-  expandable: boolean;
-  name: string;
-  level: number;
+  /** Initial data from database */
+  initialData(): DynamicFlatNode[] {
+    return this.rootLevelNodes.map(name => new DynamicFlatNode(name, 0, true));
+  }
+
+
+  getChildren(node: string): string[] | undefined {
+    return this.dataMap.get(node);
+  }
+
+  isExpandable(node: string): boolean {
+    return this.dataMap.has(node);
+  }
+}
+@Injectable()
+export class DynamicDataSource {
+
+  dataChange: BehaviorSubject<DynamicFlatNode[]> = new BehaviorSubject<DynamicFlatNode[]>([]);
+
+  get data(): DynamicFlatNode[] { return this.dataChange.value; }
+  set data(value: DynamicFlatNode[]) {
+    this.treeControl.dataNodes = value;
+    this.dataChange.next(value);
+  }
+
+  constructor(private treeControl: FlatTreeControl<DynamicFlatNode>,
+              private database: DynamicDatabase) {}
+
+  connect(collectionViewer: CollectionViewer): Observable<DynamicFlatNode[]> {
+    this.treeControl.expansionModel.onChange!.subscribe(change => {
+      if ((change as SelectionChange<DynamicFlatNode>).added ||
+        (change as SelectionChange<DynamicFlatNode>).removed) {
+        this.handleTreeControl(change as SelectionChange<DynamicFlatNode>);
+      }
+    });
+
+    return merge(collectionViewer.viewChange, this.dataChange).pipe(map(() => this.data));
+  }
+
+  /** Handle expand/collapse behaviors */
+  handleTreeControl(change: SelectionChange<DynamicFlatNode>) {
+    if (change.added) {
+      change.added.forEach((node) => this.toggleNode(node, true));
+    }
+    if (change.removed) {
+      change.removed.reverse().forEach((node) => this.toggleNode(node, false));
+    }
+  }
+
+  /**
+   * Toggle the node, remove from display list
+   */
+  toggleNode(node: DynamicFlatNode, expand: boolean) {
+    const children = this.database.getChildren(node.item);
+    const index = this.data.indexOf(node);
+    if (!children || index < 0) { // If no children, or cannot find the node, no op
+      return;
+    }
+
+    node.isLoading = true;
+
+    setTimeout(() => {
+      if (expand) {
+        const nodes = children.map(name =>
+          new DynamicFlatNode(name, node.level + 1, this.database.isExpandable(name)));
+        this.data.splice(index + 1, 0, ...nodes);
+      } else {
+        this.data.splice(index + 1, children.length);
+      }
+
+      // notify the change
+      this.dataChange.next(this.data);
+      node.isLoading = false;
+    }, 1000);
+  }
 }
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  providers: [DynamicDatabase]
 })
-
-
-
 export class AppComponent implements OnInit {
 
   showFiller = false;
@@ -114,35 +167,32 @@ export class AppComponent implements OnInit {
   estadosGraficaArray: any=[];
   listPortafolios=[];
   listProjectosProtafolios=[];
-  selectorTree:any = {};
-  private _transformer = (node: FoodNode, level: number) => {
-    return {
-      expandable: !!node.children && node.children.length > 0,
-      name: node.name,
-      level: level,
-    };
-  }
-
-  treeControl = new FlatTreeControl<ExampleFlatNode>(
-      node => node.level, node => node.expandable);
-
-  treeFlattener = new MatTreeFlattener(
-      this._transformer, node => node.level, node => node.expandable, node => node.children);
-
-  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-
-  
-  
- 
+  selectorTree:any = {}; 
+  dataInicialData: DynamicDatabase;
+  arrayPortafolios =[];
   constructor(
     private userService: UserService, 
     private projectService: ProjectService, 
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    database: DynamicDatabase
     ){   
       this.panelOpenState = true;
-      this.dataSource.data = [];
+      this.treeControl = new FlatTreeControl<DynamicFlatNode>(this.getLevel, this.isExpandable);
+      
+      this.dataInicialData= database;
+
+
+  
+    
   }
-  hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
+  inicializarTree(){
+    var arrayProtafolios;
+    console.log(this.listPortafolios)
+    this.dataInicialData.dataMap = new Map(this.arrayPortafolios);
+    this.dataSource = new DynamicDataSource(this.treeControl, this.dataInicialData);
+    this.dataSource.data = this.dataInicialData.initialData(); 
+  }
+
   opendDialog(actividad){
         this.dialog.open(DialogActividadComponent, {data: actividad});
   }
@@ -282,8 +332,29 @@ export class AppComponent implements OnInit {
       console.log('Error listMyPortfolios');
     },
     ()=>{
-      this.getProjectsPortafolios(this.listPortafolios);
+      this.listPortafolios = this.listPortafolios[0].projectNode;
+      
+
+      this.listPortafolios.forEach(
+        item =>{
+          this.arrayPortafolios.push([ item.id , this.getChildren(item.children )])
+        }
+      )
+      console.log(this.arrayPortafolios)
     })
+  }
+
+  private getChildren(children:[]){
+    var arrayChildren =[];
+    if(children){
+      children.forEach( (item:any) =>{
+        arrayChildren.push(item.id);
+      })
+      return arrayChildren;
+    }else{
+      return [];
+    }
+
   }
 
   private getProjectsPortafolios(listPortafolios){
@@ -307,28 +378,9 @@ export class AppComponent implements OnInit {
     this.projectService.getRootPortfolio()
       .then(
         (value: any)=>{
-          
-          /* this.dataSource.data=[{name:value.name,children:[ ]}] */
-         
-         
-          value.children.forEach(
-            child=>{
-              console.log(child)
-              const portafolio = this.listPortafolios[0].projectNode.filter(x=> x.id == child.id);
-              if(portafolio.length>0){
-                this.dataSource.data[0].children.push({name:portafolio[0].name, children:[]})
-              }
-         /*       */
-             /*  childNode.name= portafolio.name;
-              childNode.children = portafolio.children;
-              */
-              /* console.log(this.listPortafolios[0].projectNode.filter(x=> x.id == child.id)) */
-           
+        
+          console.log(value)
      
-              console.log( this.dataSource.data);
-            }
-            
-          )
         
         }
       )
@@ -454,7 +506,7 @@ export class AppComponent implements OnInit {
       setTimeout(
         ()=>{
           this.contadorEstados(this.estadosProyectos)
-           this.dataSource.data = [{
+          /* this.dataSource.data = [{
             name: 'Vegetables',
             children: [
               {
@@ -471,7 +523,7 @@ export class AppComponent implements OnInit {
                 ]
               },
             ]
-          }]; 
+          }]; */
           
 
         },500
@@ -480,6 +532,17 @@ export class AppComponent implements OnInit {
       }
     )
   }
+
+
+  treeControl: FlatTreeControl<DynamicFlatNode>;
+
+  dataSource: DynamicDataSource;
+
+  getLevel = (node: DynamicFlatNode) => { return node.level; };
+
+  isExpandable = (node: DynamicFlatNode) => { return node.expandable; };
+
+  hasChild = (_: number, _nodeData: DynamicFlatNode) => { return _nodeData.expandable; };
 
 
 
