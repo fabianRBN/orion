@@ -25,6 +25,7 @@ import { ChartsModule } from 'ng2-charts';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { BarChartComponent } from './bar-chart/bar-chart.component';
 import { DialogActividadComponent } from './dialog-actividad/dialog-actividad.component';
+import { PortafoliosNamePipe } from './pipes/portafolios-name.pipe';
 
 
 
@@ -33,6 +34,7 @@ import { DialogActividadComponent } from './dialog-actividad/dialog-actividad.co
     AppComponent,
     BarChartComponent,
     DialogActividadComponent,
+    PortafoliosNamePipe,
     
   ],
   entryComponents:[DialogActividadComponent],

@@ -322,6 +322,22 @@ export class AppComponent implements OnInit {
       return (actual * 100 ) / final;
   }
 
+  getNamePortafolio(id){
+    if(id == '194216118'){
+      return 'Proyectos Eliminados';
+    }
+
+    var portafolio = this.listPortafolios.filter(x=> x.id ==id);
+   
+    if(portafolio.length>0){
+      return portafolio[0].name;
+    }else{
+      console.log(this.proyectos.filter(x=> x.id==id))
+      return this.proyectos.filter(x=> x.id==id)[0].name;
+    }
+   
+  }
+
   private getListMyProtafolios(minLevel){
     this.projectService.listMyPortfolios(minLevel)
     
