@@ -328,3 +328,6 @@
 .mat-tree-node:hover{
   background: #e8e8e8;
 }
+.mat-card-header-text{
+  width: 100% !important;
+}

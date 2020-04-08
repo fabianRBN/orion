@@ -41,7 +41,7 @@
           </mat-tree> -->
 
           <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-            <mat-tree-node mat-button *matTreeNodeDef="let node" matTreeNodePadding (click)="treenodeselected($event)">
+            <mat-tree-node style="text" mat-button *matTreeNodeDef="let node" matTreeNodePadding (click)="treenodeselected($event)">
               <button mat-icon-button disabled></button>
               {{getNamePortafolio(node.item)}}
             </mat-tree-node>
@@ -86,6 +86,7 @@
             </svg>
     
         </a>
+      
     </div>
     <br>
     <div class="container">
@@ -104,24 +105,36 @@
                         </mat-expansion-panel-header>
                         <div>
                             <mat-card>
-                                <mat-card-header>
+                                <mat-card-header style="width: 100%;">
                 
-                                    <mat-card-title>
-                                        <span>Portafolio:</span>
-                                        Proyectos AFE 20425
+                                    <mat-card-title style="width: 100% !important;" >
+                                     
+
+                                        <span>Portafolio Raiz:</span>
+                                        WQA
+                                     
+                                       
                                     </mat-card-title>
+                                    
                 
                                 </mat-card-header>
+                             
                                 <mat-divider></mat-divider>
                                 <mat-card-content>
                                     <div class="container">
                                         <div class="row" style="margin-top:2%">
                                             <div class="col-6">
                                                 <div class="col-12">
-                                                    <app-bar-chart [barChartData]="datosfinales" [barChartLabels]="estadosGrafica" [barChartPlugins]="[]"></app-bar-chart>
-                                                    <button mat-button (click)="setValueofGrafic()" >Refrescar</button>
-
+                                                    
                                                     <br>
+                                                    <app-bar-chart [barChartData]="datosfinales" [barChartLabels]="estadosGrafica" [barChartPlugins]="[]"></app-bar-chart>
+                                                  
+                                                    <button  mat-raised-button color="primary" class="col-12" mat-button (click)="setValueofGrafic()">
+                                                        Recargar data
+                                                        <mat-icon style="margin-bottom: 12px;" aria-hidden="false" aria-label="">refresh</mat-icon>
+                                                    </button>
+
+                                                    <br><br>
                                                         <span>
                                                             Presupuesto Total:</span>
                                                         {{allProject.base | number:'.1-2'}}

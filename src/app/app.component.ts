@@ -380,24 +380,10 @@ export class AppComponent implements OnInit {
   }
 
   private getPortafolioRoot(){
-    /* this.projectService.getRootPortfolio().subscribe( 
-      root =>{
-        console.log(root);
-      },
-      (error)=>{
-        console.log(error);
-      },
-      ()=>{
-        console.log('Tarea completa getRootPortfolio');
-      }
-    ); */
     this.projectService.getRootPortfolio()
       .then(
         (value: any)=>{
-        
           console.log(value)
-     
-        
         }
       )
       .finally(
